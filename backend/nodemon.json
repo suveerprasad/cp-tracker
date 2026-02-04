@@ -1,0 +1,8 @@
+{
+  "watch": ["*.js", "routes/**/*.js", "controllers/**/*.js", "services/**/*.js", "middleware/**/*.js"],
+  "ext": "js,json",
+  "ignore": ["node_modules/", "*.test.js"],
+  "exec": "node server.js",
+  "restartable": "rs",
+  "delay": "1000"
+}

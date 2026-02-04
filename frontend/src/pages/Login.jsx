@@ -21,24 +21,31 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { session, signInWithGoogle } = UserAuth();
+  const { session, loading, signInWithGoogle } = UserAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session?.user) {
+    if (!loading && session?.user) {
       navigate('/profile');
     }
-  }, [session, navigate]);
+  }, [session, loading, navigate]);
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     setError('');
+    
     try {
-      const { error } = await signInWithGoogle();
-      if (error) throw error;
+      const { data, error } = await signInWithGoogle();
+      
+      if (error) {
+        throw error;
+      }
+      
+      if (!data?.url) {
+        throw new Error('No redirect URL received. Please check your Supabase OAuth configuration.');
+      }
     } catch (err) {
-      setError(err.message || 'Failed to sign in with Google');
-    } finally {
+      setError(err.message || 'Failed to sign in with Google. Please try again.');
       setIsLoading(false);
     }
   };

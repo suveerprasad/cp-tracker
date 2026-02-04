@@ -1,9 +1,15 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { UserAuth } from './AuthContext';
-const UserProfileContext = createContext();
+
+const UserProfileContext = createContext({
+  profileData: null,
+  setProfileData: () => {},
+  loading: true,
+  error: null
+});
 
 export const UserProfileProvider = ({ children }) => {
-  const { session } = UserAuth();
+  const { session, user } = UserAuth();
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +17,10 @@ export const UserProfileProvider = ({ children }) => {
   
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!session?.user) return;
+      if (!session?.user) {
+        setLoading(false);
+        return;
+      }
 
       try {
         setLoading(true);
@@ -27,7 +36,6 @@ export const UserProfileProvider = ({ children }) => {
         setProfileData(data);
       } catch (err) {
         setError(err.message);
-        console.error(err.message);
       } finally {
         setLoading(false);
       }

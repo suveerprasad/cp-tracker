@@ -55,7 +55,10 @@ export default function Profile() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      if (!session?.user) return;
+      if (!session?.user) {
+        setIsLoading(false);
+        return;
+      }
 
       try {
         setIsLoading(true);
@@ -65,7 +68,13 @@ export default function Profile() {
           },
         });
 
-        if (!response.ok) throw new Error('Failed to fetch profile');
+        if (!response.ok) {
+          if (response.status === 404) {
+            navigate('/profileform');
+            return;
+          }
+          throw new Error(`Failed to fetch profile: ${response.status}`);
+        }
 
         const responseData = await response.json();
         const data = Array.isArray(responseData) ? responseData[0] : responseData;
@@ -99,6 +108,7 @@ export default function Profile() {
         }
       } catch (err) {
         setError(err.message);
+        setIsLoading(false);
       } finally {
         setIsLoading(false);
       }
