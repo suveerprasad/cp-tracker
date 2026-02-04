@@ -11,7 +11,6 @@ import Dashboard from "./pages/Dashboard";
 import Contest from "./pages/Contest";
 import ProfileForm from "./pages/ProfileForm";
 import PP from "./pages/PP";
-import UpdatePassword from "./pages/UpdatePassword";
 import AuthRoute from './components/AuthRoute'
 
 export const router = createBrowserRouter([
@@ -31,10 +30,6 @@ export const router = createBrowserRouter([
                 <Login />
             </AuthRoute>
         )
-    },
-    {
-        path: "/update-password",
-        element: <UpdatePassword />
     },
     { path: "/privacy", element: <PP /> },
     {
